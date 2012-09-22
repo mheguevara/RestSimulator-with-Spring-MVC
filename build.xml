@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<project name="RestSimulator" default="make and deploy" basedir=".">
+
+    <property name="srcdir" value="${basedir}/src"/>
+    <property name="libdir" value="${basedir}/lib"/>
+    <property name="builddir" value="${basedir}/build"/>
+    <property name="distdir" value="${basedir}/dist"/>
+    <property name="warfile" value="${distdir}/RestSimulator.war"/>
+    <property name="webdir" value="${basedir}/web"/>
+    <property name="webinfdir" value="${webdir}/WEB-INF"/>
+    <property name="tomcat" value="/home/muhammet/tomcat/webapps/"/>
+
+
+    <path id="build.classpath">
+        <fileset dir="${libdir}">
+            <include name="**/*.jar"/>
+        </fileset>
+    </path>
+
+    <target name="make and deploy">
+
+        <delete dir="${builddir}"/>
+        <mkdir dir="${builddir}"/>
+        <delete dir="${distdir}"/>
+        <mkdir dir="${distdir}"/>
+        <javac srcdir="${srcdir}"
+               destdir="${builddir}"
+               classpathref="build.classpath"
+               debug="true"
+               debuglevel="lines,var,source"
+               target="1.6"
+               verbose="yes"/>
+        <war destfile="${warfile}" webxml="${webinfdir}/web.xml">
+            <lib dir="${libdir}"/>
+            <classes dir="${builddir}"/>
+            <webinf dir="${webinfdir}"/>
+        </war>
+
+        <copy file="${warfile}" todir="${tomcat}"/>
+
+
+
+
+
+    </target>
+
+
+
+</project>
