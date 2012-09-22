@@ -10,45 +10,47 @@
            http://www.springframework.org/schema/context
            http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-    <context:component-scan base-package="org.mheguevara.restsimulator"/>
+    <context:component-scan base-package="org.mheguevara.restsimulator.controllers"/>
     <context:annotation-config/>
     <mvc:annotation-driven/>
 
     <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+        <property name="order" value="1"/>
+        <property name="defaultContentType">
+            <bean class="org.springframework.http.MediaType">
+                <constructor-arg value="json"/>
+            </bean>
+        </property>
         <property name="mediaTypes">
             <map>
-                <entry key="html" value="text/html"/>
-                <entry key="xml" value="application/xml"/>
                 <entry key="json" value="application/json"/>
+                <entry key="xml" value="application/xml"/>
             </map>
-        </property>
-        <property name="viewResolvers">
-            <list>
-                <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-                    <property name="prefix" value="/WEB-INF/jsp/"/>
-                    <property name="suffix" value=".jsp"/>
-                </bean>
-            </list>
         </property>
         <property name="defaultViews">
             <list>
-                <bean class="org.springframework.web.servlet.view.xml.MarshallingView">
-                    <constructor-arg>
-                        <ref bean="jaxb2Marshaller"/>
-                    </constructor-arg>
-                </bean>
                 <bean class="org.springframework.web.servlet.view.json.MappingJacksonJsonView" >
                     <property name="extractValueFromSingleKeyModel" value="true"/>
                     <property name="objectMapper">
                         <bean class="org.mheguevara.restsimulator.core.PrettyObjectMapper"/>
                     </property>
                 </bean>
+                <bean class="org.springframework.web.servlet.view.xml.MarshallingView">
+                    <constructor-arg>
+                        <ref bean="jaxb2Marshaller"/>
+                    </constructor-arg>
+                </bean>
             </list>
         </property>
     </bean>
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="order" value="2"/>
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
 
-    <bean id="messageAdapter" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
-    <!--<bean id="messageAdapter" class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">-->
+    <!--<bean id="messageAdapter" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">-->
+    <bean id="messageAdapter" class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
         <property name="messageConverters">
             <list>
                 <ref bean="formHttpMessageConverter"/>
@@ -73,8 +75,22 @@
         <property name="classesToBeBound">
             <list>
                 <value>org.mheguevara.restsimulator.models.Student</value>
+                <value>org.mheguevara.restsimulator.models.Students</value>
+                <value>org.mheguevara.restsimulator.models.Course</value>
+                <value>org.mheguevara.restsimulator.models.Courses</value>
+                <value>org.mheguevara.restsimulator.core.Result</value>
             </list>
         </property>
+    </bean>
+
+    <bean id="notFoundMessage" class="org.mheguevara.restsimulator.core.Result">
+        <property name="message" value="Requested resource not found in the server"/>
+    </bean>
+    <bean id="noSuchCourseMessage" class="org.mheguevara.restsimulator.core.Result">
+        <property name="message" value="No such course exists in the server"/>
+    </bean>
+    <bean id="okMessage" class="org.mheguevara.restsimulator.core.Result">
+        <property name="message" value="Success"/>
     </bean>
 
 

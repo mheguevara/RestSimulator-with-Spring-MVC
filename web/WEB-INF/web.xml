@@ -16,13 +16,22 @@
         <listener-class>org.mheguevara.restsimulator.core.Bootstrap</listener-class>
     </listener>
     <filter>
-        <filter-name>LogFilter</filter-name>
+        <filter-name>EncodingFilter</filter-name>
         <filter-class>org.mheguevara.restsimulator.core.EncodingFilter</filter-class>
     </filter>
     <filter-mapping>
-        <filter-name>LogFilter</filter-name>
+        <filter-name>EncodingFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+    <filter>
+        <filter-name>httpPutFormFilter</filter-name>
+        <filter-class>org.springframework.web.filter.HttpPutFormContentFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>httpPutFormFilter</filter-name>
+        <servlet-name>dispatcher</servlet-name>
+    </filter-mapping>
+
     <servlet>
         <servlet-name>dispatcher</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>

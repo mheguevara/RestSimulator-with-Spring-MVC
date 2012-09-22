@@ -1,6 +1,7 @@
 package org.mheguevara.restsimulator.dao;
 
 import org.apache.log4j.Logger;
+import org.mheguevara.restsimulator.models.Course;
 import org.mheguevara.restsimulator.models.Student;
 
 import java.util.ArrayList;
@@ -54,6 +55,45 @@ public class StudentDao {
         student.setSchoolNumber(1);
 
         return id == 1 ? student : null;
+    }
+
+    public long saveStudent(Student student){
+
+
+        return 3;
+    }
+
+    public void updateStudent(long id, Student student){
+
+
+    }
+
+    public void deleteStudent(long id){
+
+    }
+
+    public List<Course> getCoursesOfStudent(long id){
+
+        List<Course> courses = new ArrayList<Course>();
+        Course course = new Course();
+        course.setId(1);
+        course.setName("Introduction to Algorithms-I");
+        course.setCode("CS-101");
+
+        Course course2 = new Course();
+        course2.setId(1);
+        course2.setName("Introduction to Algorithms-II");
+        course2.setCode("CS-102");
+
+        courses.add(course);
+        courses.add(course2);
+
+        return id == 1 ? courses : new ArrayList<Course>();
+
+    }
+
+    public boolean saveCourseForStudent(long id, Course course){
+        return id == 1 ? true:false;
     }
 
 }
