@@ -61,6 +61,7 @@
     </bean>
 
     <bean class="org.mheguevara.restsimulator.dao.StudentDao"/>
+    <bean class="org.mheguevara.restsimulator.dao.CourseDao"/>
 
     <bean id="formHttpMessageConverter" class="org.springframework.http.converter.FormHttpMessageConverter"/>
     <bean id="mappingJacksonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"/>
@@ -91,6 +92,20 @@
     </bean>
     <bean id="okMessage" class="org.mheguevara.restsimulator.core.Result">
         <property name="message" value="Success"/>
+    </bean>
+
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/restsimulator?characterEncoding=utf8"/>
+        <property name="username" value="root"/>
+        <property name="password" value="ts198967"/>
+        <property name="maxIdle" value="1"/>
+        <property name="maxActive" value="4"/>
+        <property name="initialSize" value="1"/>
+    </bean>
+
+    <bean id="dbUtil" class="org.mheguevara.restsimulator.dao.DbUtil">
+        <property name="dataSource" ref="dataSource"/>
     </bean>
 
 

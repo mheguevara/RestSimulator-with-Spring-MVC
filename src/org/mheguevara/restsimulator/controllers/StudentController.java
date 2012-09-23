@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -65,7 +66,12 @@ public class StudentController {
         logger.info("------------------------------------------");
         logger.info("GET /students");
         ModelAndView modelAndView = new ModelAndView("students");
-        List<Student> students = studentDao.getAllStudents();
+        List<Student> students = null;
+        try {
+            students = studentDao.getAllStudents();
+        } catch (SQLException e) {
+            logger.warn(e,e);
+        }
         if(students.size() == 0){
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             modelAndView.addObject(notFoundMessage);
@@ -82,7 +88,12 @@ public class StudentController {
         logger.info("------------------------------------------");
         logger.info("GET /students");
         ModelAndView modelAndView = new ModelAndView("students");
-        List<Student> students = studentDao.getAllStudents();
+        List<Student> students = null;
+        try {
+            students = studentDao.getAllStudents();
+        } catch (SQLException e) {
+            logger.warn(e,e);
+        }
         if(students.size() == 0){
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             modelAndView.addObject(notFoundMessage);
@@ -94,13 +105,19 @@ public class StudentController {
     }
 
     @RequestMapping(method = RequestMethod.POST, consumes = {"application/json","application/xml","text/xml"})
-    public void postJsonXml(@RequestBody Student student, HttpServletResponse response){
+    public void post(@RequestBody Student student, HttpServletResponse response){
         logger.info("--------------------------------------------");
         logger.info("POST /students");
         logger.debug(student);
-        long id = studentDao.saveStudent(student);
+        long id = 0;
+        try {
+            id = studentDao.saveStudent(student);
+            response.setStatus(HttpServletResponse.SC_CREATED);
+        } catch (SQLException e) {
+            logger.warn(e, e);
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        }
         logger.info("--------------------------------------------");
-        response.setStatus(HttpServletResponse.SC_CREATED);
         response.setHeader("Location", "/students/" + id);
     }
 
@@ -108,7 +125,12 @@ public class StudentController {
     public ModelAndView get(@PathVariable("id") long studentId, HttpServletResponse response){
         logger.info("------------------------------------------");
         logger.info("GET /students/"+ studentId);
-        Student student = studentDao.getStudentById(studentId);
+        Student student = null;
+        try {
+            student = studentDao.getStudentById(studentId);
+        } catch (SQLException e) {
+            logger.warn(e,e);
+        }
         ModelAndView modelAndView = new ModelAndView("student");
         if(student == null){
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
