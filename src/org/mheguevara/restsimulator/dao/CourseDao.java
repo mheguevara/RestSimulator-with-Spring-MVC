@@ -144,6 +144,7 @@ public class CourseDao {
             preparedStatement.setString(2,course.getCode());
             preparedStatement.setLong(3,courseId);
             preparedStatement.executeUpdate();
+            preparedStatement.executeUpdate();
             connection.commit();
         } catch (SQLException e) {
             logger.warn(e,e);
